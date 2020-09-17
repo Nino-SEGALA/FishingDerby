@@ -79,8 +79,7 @@ def calc(A,B,pi,E): #let us start here
         else:
             c0 = 0'''
         c0 = 1 / (sum(alphaT) + 1e-3)
-        if c0 == 0:
-            print(alphaT)
+
         cTs.append(c0) #<--
         for i in range(len(A)):
             alphaT[i] = c0*alphaT[i]
@@ -187,7 +186,7 @@ def calc(A,B,pi,E): #let us start here
 ##        print(line)
 
     logProb = 0
-    print("cTs : ", cTs)
+    #print("cTs : ", cTs)
     for i in range(len(E)):
         logProb = logProb + math.log(cTs[i])
     logProb = -logProb
@@ -286,6 +285,7 @@ def hmm3(player, maxIters):
         oldLogProb = float('-inf')
         E = []
         e = 0
+        #create vector of emission E
         while (e < len(player.Ok[fish])) and (player.Ok[fish][e] != -1):
             E.append(player.Ok[fish][e])
             e += 1
