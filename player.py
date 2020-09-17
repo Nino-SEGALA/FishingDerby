@@ -6,7 +6,7 @@ import random
 import matrixOperations as matOp
 import hmm3 as hmm
 
-N_STATES = N_SPECIES  # Number of states: species/pattern?
+N_STATES = 3*N_SPECIES  # Number of states: species/pattern?
 #N_EMISSIONS #Number of emissions: 8 direction
 THRESHOLD = 20 #to be evaluate #if distance A1A2 + B1B2 < THRESHOLD: same specie
 
@@ -49,7 +49,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
 
         if step >= 10:
         #if (step%40 == 0) and (step != 0): #to improve: maybe improve several fish's system at each step
-            hmm.hmm3(self, 23)
+            hmm.hmm3(self, 10) #~23
             self.classification() #give a specie for each fish: self.Species[0][fish]
             print("self.Species : ", self.Species)
             (fish_id, fish_type) = self.makeAGuess()

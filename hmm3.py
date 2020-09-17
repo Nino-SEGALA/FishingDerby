@@ -98,7 +98,8 @@ def calc(A,B,pi,E): #let us start here
     betaTminus1 = []
     betaTs = [-100 for j in range(len(E))]
     cTminus1 = cTs[-1]
-    for i in range(len(E)):
+    #for i in range(len(E)):
+    for i in range(len(A)):
         betaTminus1.append(cTminus1)
     betaTs[-1] = betaTminus1
 
@@ -108,6 +109,8 @@ def calc(A,B,pi,E): #let us start here
         for i in range(len(A)):
             betaTi = 0
             for j in range(len(A)):
+                bTs = betaTs[t+1]
+                bTsj = bTs[j]
                 betaTi = betaTi + A[i][j] * B[j][E[t+1]] * betaTs[t+1][j]#betaTminus1 stimmt nicht #matOp.column(B, E[t+1])[j][0]
             betaTi = betaTi * cTs[t]
             betaT.append(betaTi)
@@ -289,17 +292,8 @@ def hmm3(player, maxIters):
         while (e < len(player.Ok[fish])) and (player.Ok[fish][e] != -1):
             E.append(player.Ok[fish][e])
             e += 1
-
-        if fish == 68:
-            print("hmm3_68: ", player.Ak[68],player.Bk[68],player.qk[68], E)
-
         player.Ak[fish],player.Bk[fish],player.qk[fish], E, logProb = calc(player.Ak[fish],player.Bk[fish],player.qk[fish], E)
         while (iters < maxIters and logProb >= oldLogProb):
-
-            if fish == 68 and iters%9 == 0:
-                print("hmm3_68_chg: ", iters)
-                print(player.Ak[68], player.Bk[68], player.qk[68], E)
-
             iters = iters + 1
             oldLogProb = logProb
             player.Ak[fish],player.Bk[fish],player.qk[fish], E, logProb = calc(player.Ak[fish],player.Bk[fish],player.qk[fish], E)
