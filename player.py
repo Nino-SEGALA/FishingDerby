@@ -68,6 +68,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
         :param true_type: the correct type of the fish
         :return:
         """
+        print("reveal: ", (fish_id, true_type), correct)
         self.Species[1][fish_id] = true_type #we attribute the true specie to the fish
         self.Species[0][fish_id] = true_type #needed?
         return None
@@ -85,22 +86,29 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
         #we class all other fishes
         for fish in range(N_FISH):
 
-            #distMat = []
+            distMat = []
 
             if self.Species[1][fish] == -1: #its specie isn't revealed
                 minDist = THRESHOLD #to attribute the fish to the closest specie
                 for k in range(len(specieExample)): #we compare to the revealed species
                     fishk = specieExample[k]
                     if fishk != -1: #if there is an example for the specie k
-
-                        #distMat.append(matOp.distance(self.Ak[fish], self.Bk[fish], self.Ak[fishk], self.Bk[fishk]))
-
                         #distance are 0 or ~10; 20
                         dist = matOp.distance(self.Ak[fish], self.Bk[fish], self.Ak[fishk], self.Bk[fishk])
+
+                        '''if (fish == 68) and (dist == 0):
+                            print("0- : ", fish, self.Ak[fish], self.Bk[fish])
+                            print("0+ : ", fishk, self.Ak[fishk], self.Bk[fishk])
+                            print()'''
+
+                        distMat.append(dist)
+
                         if dist < minDist:
                             minDist = dist
                             self.Species[0][fish] = k
                             specieExample[k] = fish #example for this new specie
+
+                #print("distMat : ", distMat)
 
     #guess a fish of an already revealed specie or guess for a new specie
     def makeAGuess(self):
