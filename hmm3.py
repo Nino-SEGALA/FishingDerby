@@ -289,8 +289,9 @@ def hmm3(player, maxIters):
         while (e < len(player.Ok[fish])) and (player.Ok[fish][e] != -1):
             E.append(player.Ok[fish][e])
             e += 1
-        A, B, pi, E, logProb = calc(player.Ak[fish], player.Bk[fish], player.qk[fish], E)
-        while (iters < maxIters and logProb > oldLogProb):
+        player.Ak[fish], player.Bk[fish], player.qk[fish], E, logProb = calc(player.Ak[fish], player.Bk[fish], player.qk[fish], E)
+        while (iters < maxIters and logProb >= oldLogProb):
             iters = iters + 1
             oldLogProb = logProb
-            A, B, pi, E, logProb = calc(player.Ak[fish], player.Bk[fish], player.qk[fish], E)
+            player.Ak[fish], player.Bk[fish], player.qk[fish], E, logProb = calc(player.Ak[fish], player.Bk[fish], player.qk[fish], E)
+        #print("hmm3 : ", iters, logProb, oldLogProb)
