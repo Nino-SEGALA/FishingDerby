@@ -8,7 +8,7 @@ import hmm3 as hmm
 import hmm1
 import hmm as hmmBis
 
-N_STATES = 2 * N_SPECIES  # Number of states: species/pattern?
+N_STATES = int(1.5 * N_SPECIES)  # Number of states: species/pattern?
 # N_EMISSIONS #Number of emissions: 8 direction
 THRESHOLD = 20  # to be evaluate #if distance A1A2 + B1B2 < THRESHOLD: same specie
 
@@ -133,7 +133,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
             while (e < len(self.Ok[fish_id])) and (self.Ok[fish_id][e] != -1):
                 E.append(self.Ok[fish_id][e])
                 e += 1
-            A, B, q, O = hmmBis.hmm3(self.Ak[fish_id], self.Bk[fish_id], self.qk[fish_id], E, 23)  # ~23 #has to be coded
+            A, B, q, O = hmmBis.hmm3(self.Ak[fish_id], self.Bk[fish_id], self.qk[fish_id], E, 26)  # ~23 #has to be coded
             #print("SpecieLambda : ", true_type)
             #print(A, B, q, O)
             self.SpecieLambda[true_type] = (A, B, q)  # store the lambda for the specie
