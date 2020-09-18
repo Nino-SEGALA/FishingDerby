@@ -130,7 +130,7 @@ def hmm3(Ak, Bk, qk, E, maxIters):
         A, B, pi, E, logProb = calc(A, B, pi, E)
         #print("logP : ", logProb)
 
-    print("iters : ", iters)
+    #print("iters : ", iters)
     end = time.time()
-    print("time hmm3 : ", end-begin)
+    #print("time hmm3 : ", end-begin)
     return A, B, pi, E

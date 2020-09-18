@@ -27,7 +27,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
         self.Species = [[-1 for j in range(N_FISH)] for i in range(2)]  # First line: classification & seconde line: revealed species
         self.SpecieLambda = [-1 for j in range(N_SPECIES)]  # store 1 lambda for each specie (for comparing with new fishes)
         # pass
-        print("step limit : ", N_STEPS - N_FISH - 1)
+        #print("step limit : ", N_STEPS - N_FISH - 1)
 
     def guess(self, step, observations):
         """
@@ -75,7 +75,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
 
         # new:
         if step < N_STEPS - N_FISH - 1:
-            print("step : ", step)
+            #print("step : ", step)
             return None
         fish_id = (step-(N_STEPS - N_FISH - 1))%N_FISH
         maxProb = 0
@@ -94,21 +94,21 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
                 if prob > maxProb:
                     fish_type = spc
                     maxProb = prob
-        print("maxProb : ", maxProb)
+        #print("maxProb : ", maxProb)
         if maxProb > 0:  # if we found a good match we guess the specie
-            print("guess1 : ", (fish_id, fish_type))
+            #print("guess1 : ", (fish_id, fish_type))
             return (fish_id, fish_type)
         else:  # we guess randomly
             for spc in range(len(self.SpecieLambda)):  # lambda
                 lmd = self.SpecieLambda[spc]
                 if lmd == -1:  # if one specie hasn't an example, we guess this new specie
                     fish_type = spc
-                    print("guess2 : ", (fish_id, fish_type))
+                    #print("guess2 : ", (fish_id, fish_type))
                     return (fish_id, fish_type)
 
         # we found no match and all species have an example: we guess randomly
         fish_type = random.randint(0, N_SPECIES - 1)
-        print("guess3 : ", (fish_id, fish_type))
+        #print("guess3 : ", (fish_id, fish_type))
         return (fish_id, fish_type)
 
     def reveal(self, correct, fish_id, true_type):
@@ -121,7 +121,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
         :param true_type: the correct type of the fish
         :return:
         """
-        print("reveal: ", (fish_id, true_type), correct)
+        #print("reveal: ", (fish_id, true_type), correct)
         '''self.Species[1][fish_id] = true_type  # we attribute the true specie to the fish
         self.Species[0][fish_id] = true_type  # needed?'''
 
@@ -133,9 +133,9 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
             while (e < len(self.Ok[fish_id])) and (self.Ok[fish_id][e] != -1):
                 E.append(self.Ok[fish_id][e])
                 e += 1
-            A, B, q, O = hmmBis.hmm3(self.Ak[fish_id], self.Bk[fish_id], self.qk[fish_id], E, 30)  # ~23 #has to be coded
-            print("SpecieLambda : ", true_type)
-            print(A, B, q, O)
+            A, B, q, O = hmmBis.hmm3(self.Ak[fish_id], self.Bk[fish_id], self.qk[fish_id], E, 23)  # ~23 #has to be coded
+            #print("SpecieLambda : ", true_type)
+            #print(A, B, q, O)
             self.SpecieLambda[true_type] = (A, B, q)  # store the lambda for the specie
         return None
 
@@ -149,7 +149,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
             if fishSpecie != -1:  # has already been revealed
                 if specieExample[fishSpecie] == -1:  # still no example for this specie
                     specieExample[fishSpecie] = fish
-        print("specieExample : ", specieExample)
+        #print("specieExample : ", specieExample)
         # we class all other fish
         for fish in range(N_FISH):
 
