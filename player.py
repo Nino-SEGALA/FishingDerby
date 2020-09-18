@@ -6,7 +6,7 @@ import random
 import matrixOperations as matOp
 import hmm3 as hmm
 
-N_STATES = N_SPECIES  # Number of states: species/pattern?
+N_STATES = 3*N_SPECIES  # Number of states: species/pattern?
 #N_EMISSIONS #Number of emissions: 8 direction
 THRESHOLD = 20 #to be evaluate #if distance A1A2 + B1B2 < THRESHOLD: same specie
 
@@ -43,11 +43,15 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
             print("random guess : ", (fish_id, fish_type))
             return (fish_id, fish_type)
 
+        #create a bug to stop the program
+        '''if step == 15:
+            return (-1, -1)'''
+
         if step >= 10:
         #if (step%40 == 0) and (step != 0): #to improve: maybe improve several fish's system at each step
-            hmm.hmm3(self, 30)
+            hmm.hmm3(self, 10) #~23
             self.classification() #give a specie for each fish: self.Species[0][fish]
-            #print("self.Species : ", self.Species)
+            print("self.Species : ", self.Species)
             (fish_id, fish_type) = self.makeAGuess()
             print("guess : ", (fish_id, fish_type))
             return (fish_id, fish_type) #we return our guess
@@ -64,6 +68,7 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
         :param true_type: the correct type of the fish
         :return:
         """
+        print("reveal: ", (fish_id, true_type), correct)
         self.Species[1][fish_id] = true_type #we attribute the true specie to the fish
         self.Species[0][fish_id] = true_type #needed?
         return None
@@ -77,17 +82,33 @@ class PlayerControllerHMM(PlayerControllerHMMAbstract):
             if fishSpecie != -1: #has already been revealed
                 if specieExample[fishSpecie] == -1: #still no example for this specie
                     specieExample[fishSpecie] = fish
-        #print("specieExample : ", specieExample)
+        print("specieExample : ", specieExample)
         #we class all other fishes
         for fish in range(N_FISH):
+
+            distMat = []
+
             if self.Species[1][fish] == -1: #its specie isn't revealed
+                minDist = THRESHOLD #to attribute the fish to the closest specie
                 for k in range(len(specieExample)): #we compare to the revealed species
                     fishk = specieExample[k]
                     if fishk != -1: #if there is an example for the specie k
                         #distance are 0 or ~10; 20
-                        if matOp.distance(self.Ak[fish], self.Bk[fish], self.Ak[fishk], self.Bk[fishk]) < THRESHOLD:
+                        dist = matOp.distance(self.Ak[fish], self.Bk[fish], self.Ak[fishk], self.Bk[fishk])
+
+                        '''if (fish == 68) and (dist == 0):
+                            print("0- : ", fish, self.Ak[fish], self.Bk[fish])
+                            print("0+ : ", fishk, self.Ak[fishk], self.Bk[fishk])
+                            print()'''
+
+                        distMat.append(dist)
+
+                        if dist < minDist:
+                            minDist = dist
                             self.Species[0][fish] = k
                             specieExample[k] = fish #example for this new specie
+
+                #print("distMat : ", distMat)
 
     #guess a fish of an already revealed specie or guess for a new specie
     def makeAGuess(self):
