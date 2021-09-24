@@ -94,6 +94,8 @@ def calc(A,B,pi,E): #let us start here
 ##
 ##    print("--------------------------------------------------------\nBETA")
 
+    print("Cts : ", cTs)
+
     #Scale and Initialize
     betaTminus1 = []
     betaTs = [-100 for j in range(len(E))]
@@ -282,8 +284,11 @@ def hmm3(maxIters):
 #cProfile.run('hmm3(1000)')
 #print(hmm3(10000))
 
-def hmm3(player, maxIters):
-    for fish in range(N_FISH):
+def hmm3(player, maxIters, step):
+    begin = time.time()
+    mod = N_FISH//6 #have to make loops for 6 fishes only
+    for fish in range(int((step%mod)*N_FISH/mod), int((step%mod+1)*N_FISH/mod)):
+        begin1 = time.time()
         iters = 0#max Iters already defined
         oldLogProb = float('-inf')
         E = []
@@ -298,3 +303,26 @@ def hmm3(player, maxIters):
             oldLogProb = logProb
             player.Ak[fish],player.Bk[fish],player.qk[fish], E, logProb = calc(player.Ak[fish],player.Bk[fish],player.qk[fish], E)
         #print("hmm3 : ", iters, logProb, oldLogProb)
+        end1 = time.time()
+        print("time 1 loop: ", end1-begin1)
+    end = time.time()
+    print("time hmm3 : ", end-begin)
+
+def hmm3(Ak, Bk, qk, E, maxIters):
+    begin = time.time()
+    iters = 0  # max Iters already defined
+    oldLogProb = float('-inf')
+    print("hmm3 init : ", Ak, Bk, qk, E)
+    A, B, pi, E, logProb = calc(Ak, Bk, qk, E)
+    print("hmm3 inter : ", A, B, pi, E, logProb)
+    print("logP : ", logProb)
+    while (iters < maxIters and logProb > oldLogProb):
+        iters = iters + 1
+        oldLogProb = logProb
+        A, B, pi, E, logProb = calc(A, B, pi, E)
+        print("logP : ", logProb)
+
+    print("iters : ", iters)
+    end = time.time()
+    print("time hmm3 : ", end-begin)
+    return A, B, pi, E
